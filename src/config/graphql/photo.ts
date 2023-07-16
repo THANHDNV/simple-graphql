@@ -14,7 +14,7 @@ export const GET_PHOTOS = gql(`
       data {
         id
         title
-        url
+        thumbnailUrl
       }
       meta {
         totalCount
