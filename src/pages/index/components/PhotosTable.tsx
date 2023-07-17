@@ -1,4 +1,5 @@
 import { DataGrid, GridColDef, GridPaginationModel } from "@mui/x-data-grid";
+import ThumbnailImage from "./ThumbnailImage";
 
 const columns: GridColDef[] = [
   {
@@ -25,7 +26,9 @@ const columns: GridColDef[] = [
     disableColumnMenu: true,
     flex: 1,
     renderCell: ({ row }) => {
-      return <img src={row.thumbnailUrl} alt={row.title} />;
+      return (
+        <ThumbnailImage url={row.thumbnailUrl} alt={row.title} id={row.id} />
+      );
     },
     headerAlign: "center",
     hideSortIcons: true,
@@ -56,6 +59,7 @@ const PhotosTable = ({
       onPaginationModelChange={onChangePagination}
       pageSizeOptions={[5, 10, 15]}
       rowCount={totalCount ?? 0}
+      rowSelection={false}
       style={{
         width: "100%",
       }}

@@ -21,4 +21,13 @@ export const GET_PHOTOS = gql(`
       }
     }
   }
-`)
+`);
+
+export const GET_PHOTO_DETAIL = gql(`
+  query GET_PHOTO_DETAIL($id: ID!) {
+    photo(id: $id) {
+      title
+      url
+    }    
+  }
+`);
