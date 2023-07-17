@@ -9,8 +9,9 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useCallback, useState } from "react";
+import { ChangeEventHandler, useCallback, useEffect, useState } from "react";
 import SearchIcon from "@mui/icons-material/Search";
+import { useDebounceCallback } from "@react-hook/debounce";
 
 const Container = styled(MaterialContainer)`
   display: flex;
@@ -67,6 +68,7 @@ export const IndexPage = () => {
     },
   });
   const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const [search, setSearch] = useState("");
 
   const onPaginationModelChange = useCallback(
     async (model: GridPaginationModel) => {
@@ -88,6 +90,44 @@ export const IndexPage = () => {
     [fetchMore, isLoadingMore]
   );
 
+  const onSearch: ChangeEventHandler<HTMLInputElement> = useCallback(
+    (event) => {
+      const value = event.target.value;
+
+      setSearch(value);
+    },
+    []
+  );
+
+  const onChangeSearchTerm = useDebounceCallback(
+    (searchTerm: string) => {
+      setIsLoadingMore(true);
+
+      fetchMore({
+        variables: {
+          page: 1,
+          limit: paginationModel.pageSize,
+          search: searchTerm,
+        },
+      })
+        .then(() => {
+          setPaginationModel((currentModel) => ({
+            ...currentModel,
+            page: 0,
+          }));
+        })
+        .finally(() => {
+          setIsLoadingMore(false);
+        });
+    },
+    150,
+    false
+  );
+
+  useEffect(() => {
+    onChangeSearchTerm(search);
+  }, [onChangeSearchTerm, search]);
+
   return (
     <Container maxWidth="md">
       <Typography variant="h2">Photo Album</Typography>
@@ -100,6 +140,8 @@ export const IndexPage = () => {
             </InputAdornment>
           ),
         }}
+        value={search}
+        onChange={onSearch}
       />
       {!!data && (
         <DataGrid
