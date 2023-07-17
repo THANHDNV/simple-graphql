@@ -21,7 +21,12 @@ const ThumbnailImage = ({ url, alt, id }: Props) => {
 
   return (
     <>
-      <Image src={url} alt={alt} onClick={onClickImage} />
+      <Image
+        src={url}
+        alt={alt}
+        onClick={onClickImage}
+        data-testid={`thumbnail-${id}`}
+      />
       <DetailImageModal
         id={id}
         open={openDetailModal}

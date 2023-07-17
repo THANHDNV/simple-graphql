@@ -1,4 +1,4 @@
-import { ApolloClient, InMemoryCache } from '@apollo/client';
+import { ApolloClient, InMemoryCache } from "@apollo/client";
 
 export const apolloClient = new ApolloClient({
   uri: process.env.REACT_APP_API_URL,
@@ -6,8 +6,8 @@ export const apolloClient = new ApolloClient({
     typePolicies: {
       PhotosPage: {
         queryType: true,
-        merge: false
-      }
-    }
+        merge: false,
+      },
+    },
   }),
 });

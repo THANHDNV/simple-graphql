@@ -61,14 +61,18 @@ const DetailImageModal = ({ open, setOpen, id }: Props) => {
   const onClose = useCallback(() => setOpen(false), [setOpen]);
 
   return (
-    <Modal open={open} onClose={onClose}>
+    <Modal open={open} onClose={onClose} data-testid={`photo-detail-modal`}>
       <Wrapper>
         <CloseButton onClick={onClose}>
           <CloseIcon />
         </CloseButton>
         {loading && <CircularProgress />}
         {!loading && !!data?.photo?.url && (
-          <Image src={data.photo.url} alt={data.photo.title as string} />
+          <Image
+            src={data.photo.url}
+            alt={data.photo.title as string}
+            data-testid={`photo-detail-modal-image`}
+          />
         )}
       </Wrapper>
     </Modal>

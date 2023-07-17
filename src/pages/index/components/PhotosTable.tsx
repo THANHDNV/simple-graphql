@@ -63,6 +63,7 @@ const PhotosTable = ({
       style={{
         width: "100%",
       }}
+      data-testid="photos-table"
     />
   );
 };
