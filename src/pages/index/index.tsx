@@ -1,8 +1,6 @@
 import { useQuery } from "@apollo/client";
-import * as graphql from "../config/graphql";
-import MaterialContainer from "@mui/material/Container";
-import { DataGrid, GridColDef, GridPaginationModel } from "@mui/x-data-grid";
-import { styled } from "styled-components";
+import * as graphql from "../../config/graphql";
+import { GridPaginationModel } from "@mui/x-data-grid";
 import {
   CircularProgress,
   InputAdornment,
@@ -12,47 +10,8 @@ import {
 import { ChangeEventHandler, useCallback, useEffect, useState } from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import { useDebounceCallback } from "@react-hook/debounce";
-
-const Container = styled(MaterialContainer)`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-  padding-top: 12px;
-`;
-
-const columns: GridColDef[] = [
-  {
-    field: "id",
-    headerName: "id",
-    width: 12,
-    resizable: false,
-    disableColumnMenu: true,
-    headerAlign: "center",
-    hideSortIcons: true,
-    align: "center",
-  },
-  {
-    field: "title",
-    headerName: "Title",
-    flex: 0.75,
-    disableColumnMenu: true,
-    headerAlign: "center",
-    hideSortIcons: true,
-  },
-  {
-    field: "thumbnailUrl",
-    headerName: "Thumbnail",
-    disableColumnMenu: true,
-    flex: 1,
-    renderCell: ({ row }) => {
-      return <img src={row.thumbnailUrl} alt={row.title} />;
-    },
-    headerAlign: "center",
-    hideSortIcons: true,
-    align: "center",
-  },
-];
+import { Container } from "./styled";
+import PhotosTable from "./components/PhotosTable";
 
 export const IndexPage = () => {
   const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({
@@ -144,18 +103,11 @@ export const IndexPage = () => {
         onChange={onSearch}
       />
       {!!data && (
-        <DataGrid
-          columns={columns}
-          rows={data.photos?.data || []}
-          paginationMode="server"
-          getRowHeight={() => "auto"}
-          paginationModel={paginationModel}
-          onPaginationModelChange={onPaginationModelChange}
-          pageSizeOptions={[5, 10, 15]}
-          rowCount={data.photos?.meta?.totalCount || 0}
-          style={{
-            width: "100%",
-          }}
+        <PhotosTable
+          data={data.photos?.data}
+          totalCount={data.photos?.meta?.totalCount}
+          pagination={paginationModel}
+          onChangePagination={onPaginationModelChange}
         />
       )}
       {(loading || isLoadingMore) && <CircularProgress />}

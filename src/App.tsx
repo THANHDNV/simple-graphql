@@ -1,6 +1,6 @@
-import { ApolloProvider } from '@apollo/client';
-import { apolloClient } from './config/apollo';
-import { IndexPage } from './pages';
+import { ApolloProvider } from "@apollo/client";
+import { apolloClient } from "./config/apollo";
+import { IndexPage } from "./pages/index";
 
 function App() {
   return (
