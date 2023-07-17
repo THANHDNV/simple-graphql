@@ -3,8 +3,14 @@ import * as graphql from "../config/graphql";
 import MaterialContainer from "@mui/material/Container";
 import { DataGrid, GridColDef, GridPaginationModel } from "@mui/x-data-grid";
 import { styled } from "styled-components";
-import { CircularProgress, Typography } from "@mui/material";
+import {
+  CircularProgress,
+  InputAdornment,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { useCallback, useState } from "react";
+import SearchIcon from "@mui/icons-material/Search";
 
 const Container = styled(MaterialContainer)`
   display: flex;
@@ -85,6 +91,16 @@ export const IndexPage = () => {
   return (
     <Container maxWidth="md">
       <Typography variant="h2">Photo Album</Typography>
+      <TextField
+        fullWidth
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <SearchIcon />
+            </InputAdornment>
+          ),
+        }}
+      />
       {!!data && (
         <DataGrid
           columns={columns}
