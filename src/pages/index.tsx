@@ -4,7 +4,7 @@ import MaterialContainer from "@mui/material/Container";
 import { DataGrid, GridColDef, GridPaginationModel } from "@mui/x-data-grid";
 import { styled } from "styled-components";
 import { CircularProgress, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 
 const Container = styled(MaterialContainer)`
   display: flex;
@@ -60,20 +60,31 @@ export const IndexPage = () => {
       },
     },
   });
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
 
-  useEffect(() => {
-    fetchMore({
-      variables: {
-        page: paginationModel.page + 1,
-        limit: paginationModel.pageSize,
-      },
-    });
-  }, [fetchMore, paginationModel.page, paginationModel.pageSize]);
+  const onPaginationModelChange = useCallback(
+    async (model: GridPaginationModel) => {
+      if (isLoadingMore) return;
+
+      setIsLoadingMore(true);
+
+      await fetchMore({
+        variables: {
+          page: model.page + 1,
+          limit: model.pageSize,
+        },
+      }).finally(() => {
+        setIsLoadingMore(false);
+      });
+
+      setPaginationModel(model);
+    },
+    [fetchMore, isLoadingMore]
+  );
 
   return (
     <Container maxWidth="md">
       <Typography variant="h2">Photo Album</Typography>
-      {loading && <CircularProgress />}
       {!!data && (
         <DataGrid
           columns={columns}
@@ -81,7 +92,7 @@ export const IndexPage = () => {
           paginationMode="server"
           getRowHeight={() => "auto"}
           paginationModel={paginationModel}
-          onPaginationModelChange={setPaginationModel}
+          onPaginationModelChange={onPaginationModelChange}
           pageSizeOptions={[5, 10, 15]}
           rowCount={data.photos?.meta?.totalCount || 0}
           style={{
@@ -89,6 +100,7 @@ export const IndexPage = () => {
           }}
         />
       )}
+      {(loading || isLoadingMore) && <CircularProgress />}
     </Container>
   );
 };
