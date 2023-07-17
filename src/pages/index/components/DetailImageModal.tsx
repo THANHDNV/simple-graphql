@@ -17,6 +17,8 @@ const Wrapper = styled(Box)`
   border-radius: 8px;
   min-height: 96px;
   min-width: 108px;
+  max-height: 100%;
+  max-width: 100%;
 `;
 
 const CloseButton = styled(Button)`
@@ -36,6 +38,11 @@ const CloseButton = styled(Button)`
 
   &:hover {
     background: ${grey[100]};
+`;
+
+const Image = styled("img")`
+  max-width: calc(100vw - 24px * 2);
+  max-height: calc(100vh - 24px - 72px);
 `;
 
 interface Props {
@@ -61,7 +68,7 @@ const DetailImageModal = ({ open, setOpen, id }: Props) => {
         </CloseButton>
         {loading && <CircularProgress />}
         {!loading && !!data?.photo?.url && (
-          <img src={data.photo.url} alt={data.photo.title as string} />
+          <Image src={data.photo.url} alt={data.photo.title as string} />
         )}
       </Wrapper>
     </Modal>
